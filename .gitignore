@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Certificates (private keys — never push)
+*.pem
+dev-dist
