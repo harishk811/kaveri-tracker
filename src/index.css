@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased;
+    @apply dark:bg-slate-950 dark:text-slate-100;
+    /* Safe area for notch / gesture nav on Android */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    overscroll-behavior-y: none;
+  }
+
+  /* Inputs at 16px to prevent iOS zoom, also helps Android */
+  input, select, textarea {
+    font-size: 16px;
+  }
+
+  /* Tap targets stay accessible */
+  button, [role="button"] {
+    touch-action: manipulation;
+  }
+}
+
+@layer components {
+  .app-shell {
+    @apply mx-auto max-w-app min-h-screen bg-slate-50 dark:bg-slate-950;
+    @apply shadow-sm relative;
+  }
+
+  .card {
+    @apply rounded-2xl bg-white dark:bg-slate-900 p-4 shadow-sm;
+    @apply border border-slate-200 dark:border-slate-800;
+  }
+
+  .tap-target {
+    @apply min-h-tap min-w-tap inline-flex items-center justify-center;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5;
+    @apply font-medium text-sm transition active:scale-95;
+    @apply disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-primary {
+    @apply btn bg-gradient-to-r from-brand-600 to-brand-500 text-white;
+    @apply shadow-sm shadow-brand-600/25 hover:from-brand-700 hover:to-brand-600;
+  }
+  .btn-secondary {
+    @apply btn bg-slate-100 text-slate-700 hover:bg-slate-200;
+    @apply dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700;
+  }
+  .btn-ghost {
+    @apply btn text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800;
+  }
+
+  /* Visible focus for keyboard users, invisible to touch */
+  button:focus-visible,
+  [role="button"]:focus-visible,
+  a:focus-visible {
+    outline: none;
+    @apply ring-2 ring-brand-500/60 ring-offset-2 ring-offset-white dark:ring-offset-slate-950;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .term {
+    @apply underline decoration-dotted decoration-slate-400 underline-offset-2;
+    @apply cursor-help text-brand-700 dark:text-brand-100;
+  }
+
+  /* Hide scrollbar but keep scrollable — for horizontal week scroller */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+}
+
+@layer utilities {
+  .safe-bottom {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
+  }
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .pt-safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+}
