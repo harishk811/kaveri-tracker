@@ -3,10 +3,14 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const resolve = (p: string) => path.resolve(__dirname, p)
+
+const certFile = resolve('192.168.0.117.pem')
+const keyFile = resolve('192.168.0.117-key.pem')
+const hasLocalCert = existsSync(certFile) && existsSync(keyFile)
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -101,10 +105,14 @@ export default defineConfig({
     // Used instead of `npx serve`: serve adds a Content-Disposition header
     // that some Android Chrome versions reject on service-worker scripts,
     // which silently kills the SW install (registered but never controlling).
+    // HTTPS is only attached when the mkcert pem files exist locally — on
+    // Netlify (no pem files) the build must still work, over its own TLS.
     host: true,
-    https: {
-      cert: readFileSync(resolve('192.168.0.117.pem')),
-      key: readFileSync(resolve('192.168.0.117-key.pem')),
-    },
+    https: hasLocalCert
+      ? {
+          cert: readFileSync(certFile),
+          key: readFileSync(keyFile),
+        }
+      : undefined,
   },
 })
